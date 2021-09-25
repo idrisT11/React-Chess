@@ -20,81 +20,31 @@ class Plateau extends React.Component{
         super(props);
 
         this.playerColor = 1;
-        this.newPosition = null;
-        this.newPositionStyle = null;
+        this.newMovePosition = null;
+        this.newMovePositionStyle = null;
 
         this.state = {
             selectedPiece: null,
             possibleMoves: null,
             moving: false,
+            renderingLastMove: false,
         }
 
         
     }
 
-
-    findPossibleMoves(x, y, tour){
-        
-        let table = toggleDirection(this.props.status, tour),
-            possibleMoves = Array(8).fill(null).map(() => Array(8).fill(0));//Innit a 8x8 matrix (JS :/)
-
-
-        y = (tour === COLOR.NOIR) ? y : 8-y-1;
-
-        //PAWN
-        //==============================================================
-        if ( table[y][x] === PIECE.PION) 
-        {
-            let  pasclassique = false; // Si on peut fair un pas classique, on met cette variable a 1
-
-            //CLASSICAL MOVE
-            if ( table[y+1][x] === PIECE.NULL)
-            {
-                possibleMoves[y+1][x] = 1;
-                pasclassique = true;
-            }
-
-            //FIRST MOVE
-            if ( pasclassique && y === 1 )
-            {
-
-                if ( table[y+2][x] === PIECE.NULL )
-
-                    possibleMoves[y+2][x] = 1;
-
-            }
-
-            //TAKING OPPONENT'S PIECE
-            if ( y !== 7 ) 
-            {
-                if ( x !== 7 && table[y+1][x+1] * tour < 0)
-
-                    possibleMoves[y+1][x+1] = 1;
-
-                if ( x !== 0 && table[y+1][x-1] * tour < 0 )
-
-                    possibleMoves[y+1][x-1] = 1;
-            }
-
-            console.log(possibleMoves);
+    static getDerivedStateFromProps(props, state){
+        return {
+            renderingLastMove: true,
         }
+    }
 
-        return toggleDirection(possibleMoves, tour);
-        
-        function toggleDirection(table, tour){
-            if( tour === COLOR.BLANC )
-            {
-                let newTable = new Array(8);
+    HandleEndMoveAnim(){
 
-                for (let i = 0; i < 8; i++) 
-                    newTable[i] = [...table[8-i-1]];
+        if( this.state.renderingLastMove )
 
-                return newTable;
-            }
-            else
-                return table;
+            this.setState({renderingLastMove : false});
 
-        }
     }
 
     handleClick(x, y){
@@ -124,13 +74,14 @@ class Plateau extends React.Component{
         //If we've selected a piece and clicked on a legit position to make a move
         else if ( this.state.selectedPiece && this.state.possibleMoves[y][x] == 1 )
         {
-            this.newPosition = { x, y };
-            this.newPositionStyle = {
+            this.newMovePosition = { x, y };
+            this.newMovePositionStyle = {
                 top: (y * 75) + 'px',
                 left: (x * 75) + 'px',
             }
             this.setState({
-                moving: true
+                moving: true,
+                possibleMoves: null
             })
         }
         else
@@ -205,7 +156,7 @@ class Plateau extends React.Component{
         return grilleCaseElements;
     }
 
-    generatePieces(selectedPiece, moving){
+    generatePieces(selectedPiece, moving, renderingLastMove){
 
         let grillePieceElements = [];
 
@@ -213,37 +164,55 @@ class Plateau extends React.Component{
             newMove = this.props.move.newPieceInfo;
 
 
-        grillePieceElements.push( 
-            loadMovedPiece.bind(this, precMove, newMove, this.props.status, this.playerColor)() 
-        );
-
         for (let k = 0; k < 64 ; k++) 
         {
             let i = k % 8,
                 j = Math.floor(k / 8);
 
             //If the tile isnt empty, nor has it been moved the previous turn
-            if(this.props.status[i][j] !== 0 && ( i !== newMove.y || j !== newMove.x) )
+            if(this.props.status[i][j] !== 0)
             {   
                 
                 let isSelected = selectedPiece && (i === selectedPiece.y) && (j === selectedPiece.x),
-                    isEaten = this.newPosition && (i === this.newPosition.y) && (j === this.newPosition.x);
+                    beenMovedLastTurn = ( i === newMove.y && j === newMove.x),
+                    isEaten = this.newMovePosition && (i === this.newMovePosition.y) && (j === this.newMovePosition.x);
 
-                let position = {
-                    top: ( i * 75 ) + 'px',
-                    left: ( j * 75 ) + 'px',
+
+                let positionStyle, newPositionStyle;
+                if (beenMovedLastTurn)
+                {
+                    positionStyle = {
+                        top: ( precMove.y * 75 ) + 'px',
+                        left: ( precMove.x * 75 ) + 'px',                
+                    };
+                    newPositionStyle = {
+                        top: ( newMove.y * 75 ) + 'px',
+                        left: ( newMove.x * 75 ) + 'px',                            
+                    }
+                }
+                else
+                {
+                    positionStyle = {
+                        top: ( i * 75 ) + 'px',
+                        left: ( j * 75 ) + 'px',            
+                    };
+                    newPositionStyle = this.newMovePositionStyle;                 
                 }
                 
+                console.log(isEaten && moving);
+
                 grillePieceElements.push(
 
                     <Piece 
                         pieceID={this.props.status[i][j]}
-                        isEaten={isEaten}
-                        isSelected={isSelected}
-                        moving={moving}
+                        
+                        translation={(moving && isSelected) || (renderingLastMove && beenMovedLastTurn)}
+                        fadeIn={moving && isEaten}
 
-                        position={position}
-                        newPosition={this.newPositionStyle}
+                        position={positionStyle}
+                        newPosition={newPositionStyle}
+
+                        HandleEndMoveAnim={()=>this.HandleEndMoveAnim()}
 
                         key={k+'pieceGrille'}
                     />
@@ -255,49 +224,6 @@ class Plateau extends React.Component{
 
         return grillePieceElements;
 
-
-        function loadMovedPiece(precMove, newMove, status, tour) {
-
-            let cursor = (tour * status[newMove.y][newMove.x] > 0 ? 'pointer' : 'initial'),
-
-                isEaten = this.newPosition && 
-                        (newMove.y === this.newPosition.y) && 
-                        (newMove.x === this.newPosition.x);
-            
-            return (
-                <Spring
-                    from={{top: (precMove.y*75) + 'px', left: ( precMove.x * 75 ) + 'px'}}
-                    to={{top: (newMove.y*75) + 'px', left: ( newMove.x * 75 ) + 'px'}}
-
-                    opacity={this.state.moving && isEaten ? 0 : 1}
-                    key={99+'pieceGrille'}
-
-                >
-                {   styles => (
-
-                    <animated.div 
-                        style={{
-                            ...styles, 
-                            cursor
-                        }}
-                    >
-                        <Piece 
-                            pieceID={status[newMove.y][newMove.x]}
-                            isEaten={isEaten}
-                            isSelected={false}
-                            moving={moving}
-
-                            position={position}
-                            newPosition={this.newPositionStyle}
-
-                            key={k+'pieceGrille'}
-                        />
-                    </animated.div>
-
-                )}
-                </Spring>
-            );
-        }
     }
 
     generateClickLayer(){
@@ -335,7 +261,69 @@ class Plateau extends React.Component{
         return grilleClickElements;
     }
 
+    findPossibleMoves(x, y, tour){
+        
+        let table = toggleDirection(this.props.status, tour),
+            possibleMoves = Array(8).fill(null).map(() => Array(8).fill(0));//Innit a 8x8 matrix (JS :/)
 
+
+        y = (tour === COLOR.NOIR) ? y : 8-y-1;
+
+        //PAWN
+        //==============================================================
+        if ( table[y][x] === PIECE.PION) 
+        {
+            let  pasclassique = false; // Si on peut fair un pas classique, on met cette variable a 1
+
+            //CLASSICAL MOVE
+            if ( table[y+1][x] === PIECE.NULL)
+            {
+                possibleMoves[y+1][x] = 1;
+                pasclassique = true;
+            }
+
+            //FIRST MOVE
+            if ( pasclassique && y === 1 )
+            {
+
+                if ( table[y+2][x] === PIECE.NULL )
+
+                    possibleMoves[y+2][x] = 1;
+
+            }
+
+            //TAKING OPPONENT'S PIECE
+            if ( y !== 7 ) 
+            {
+                if ( x !== 7 && table[y+1][x+1] * tour < 0)
+
+                    possibleMoves[y+1][x+1] = 1;
+
+                if ( x !== 0 && table[y+1][x-1] * tour < 0 )
+
+                    possibleMoves[y+1][x-1] = 1;
+            }
+
+            console.log(possibleMoves);
+        }
+
+        return toggleDirection(possibleMoves, tour);
+        
+        function toggleDirection(table, tour){
+            if( tour === COLOR.BLANC )
+            {
+                let newTable = new Array(8);
+
+                for (let i = 0; i < 8; i++) 
+                    newTable[i] = [...table[8-i-1]];
+
+                return newTable;
+            }
+            else
+                return table;
+
+        }
+    }
 
     render(){
         return(
@@ -343,7 +331,7 @@ class Plateau extends React.Component{
                 {this.generateGrille(this.state.selectedPiece, this.state.possibleMoves)}
 
                 <div id='piecesCTN' onClick={(e)=>this.handleClick(e)}>
-                    {this.generatePieces(this.state.selectedPiece, this.state.moving)}
+                    {this.generatePieces(this.state.selectedPiece, this.state.moving, this.state.renderingLastMove)}
                 </div>
 
                 <div id='clickLayer'>

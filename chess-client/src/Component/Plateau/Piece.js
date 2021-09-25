@@ -58,23 +58,38 @@ export default class Piece extends Component {
 
 
     render() {
-        let moving  = this.props.moving,
-            isSelected =  this.props.isSelected,
-            isEaten = this.props.isEaten;
-
+        let position  = this.props.position,
+            newPosition = this.props.newPosition;
+ 
         let cursor = (this.props.color * this.props.pieceID > 0 ? 'pointer' : 'initial');
 
-        console.log(this.loadPieceUrl);        
         return (
             <Spring
-                top={moving && isSelected ? this.props.newPosition.top : this.props.position.top}
-                left={moving && isSelected ? this.props.newPosition.left : this.props.position.left}
-                opacity={moving && isEaten ? '0' : '1'}
+                //top={ this.props.translation ? newPosition.top : position.top}
+                //left={ this.props.translation ? newPosition.left : position.left}
+
+                from={{
+                    top: position.top,
+                    left: position.left,
+                }}
+
+                to={{
+                    top: this.props.translation ? newPosition.top : position.top,
+                    left:  this.props.translation ? newPosition.left : position.left,
+
+                    //opacity: this.props.fadeIn ? '0' : '1',
+                }}
+
+                //opacity={moving && isEaten ? '0' : '1'}
+
+                //cancel={!(this.props.translation || this.props.fadeIn )}
+
+                onRest={this.props.HandleEndMoveAnim}
             >
                 { styles => (
                     <animated.div
                         className={'pieceElement'}
-                        style={{...styles, cursor}}
+                        style={{...styles, cursor, zIndex: this.props.translation ? 10 : 1}}
                     >
                         <img src={this.loadPieceUrl(this.props.pieceID)}>
     
