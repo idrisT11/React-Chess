@@ -45,6 +45,10 @@ class Plateau extends React.Component{
 
             this.setState({renderingLastMove : false});
 
+        else if ( this.state.moving ) {
+            
+        }
+
     }
 
     handleClick(x, y){
@@ -161,7 +165,8 @@ class Plateau extends React.Component{
         let grillePieceElements = [];
 
         let precMove = this.props.move.previousPieceInfo,
-            newMove = this.props.move.newPieceInfo;
+            newMove = this.props.move.newPieceInfo,
+            precPiece = this.props.move.consumedPiece;
 
 
         for (let k = 0; k < 64 ; k++) 
@@ -199,7 +204,6 @@ class Plateau extends React.Component{
                     newPositionStyle = this.newMovePositionStyle;                 
                 }
                 
-                console.log(isEaten && moving);
 
                 grillePieceElements.push(
 
@@ -222,12 +226,34 @@ class Plateau extends React.Component{
             
         }
 
+
+        console.log({top: newMove.y +'', left: newMove.x+''}, renderingLastMove);
+
+        if( precPiece !== PIECE.NULL && renderingLastMove)
+            grillePieceElements.push(
+
+                <Piece 
+                    pieceID={precPiece}
+                    
+                    translation={false}
+                    fadeIn={renderingLastMove}
+
+                    position={{top: (newMove.y*75)+'px' , left: (newMove.x*75)+'px'}}
+                    newPosition={{top: (newMove.y*75)+'px' +'', left: (newMove.x*75)+'px'+''}}
+
+                    HandleEndMoveAnim={()=>this.HandleEndMoveAnim()}
+
+                    key={99530+'pieceGrille'}
+                />
+
+            );
+
         return grillePieceElements;
 
     }
 
     generateClickLayer(){
-    
+
         let grilleClickElements = [];
 
         for (let i = 0; i < 64 ; i++) 
@@ -326,6 +352,7 @@ class Plateau extends React.Component{
     }
 
     render(){
+        console.log(this.state.renderingLastMove);
         return(
             <div id='plateauCTN'>
                 {this.generateGrille(this.state.selectedPiece, this.state.possibleMoves)}

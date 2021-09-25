@@ -25,13 +25,13 @@ const plateauStatus = [
 const move = {
   previousPieceInfo:{
     x: 1,
-    y: 3,
+    y: 1,
   },
   newPieceInfo:{
     x: 1,
     y: 4,
   },
-  consumedPiece: PIECE.NULL
+  consumedPiece: PIECE.PION
 }
 
 function App() {

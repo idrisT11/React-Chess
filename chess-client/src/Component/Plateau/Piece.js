@@ -60,31 +60,26 @@ export default class Piece extends Component {
     render() {
         let position  = this.props.position,
             newPosition = this.props.newPosition;
- 
+        console.log(position);
         let cursor = (this.props.color * this.props.pieceID > 0 ? 'pointer' : 'initial');
 
         return (
             <Spring
-                //top={ this.props.translation ? newPosition.top : position.top}
-                //left={ this.props.translation ? newPosition.left : position.left}
 
                 from={{
                     top: position.top,
                     left: position.left,
+                    opacity: '1'
                 }}
 
                 to={{
                     top: this.props.translation ? newPosition.top : position.top,
                     left:  this.props.translation ? newPosition.left : position.left,
 
-                    //opacity: this.props.fadeIn ? '0' : '1',
+                    opacity: this.props.fadeIn ? '0' : '1',
                 }}
 
-                //opacity={moving && isEaten ? '0' : '1'}
-
-                //cancel={!(this.props.translation || this.props.fadeIn )}
-
-                onRest={this.props.HandleEndMoveAnim}
+                //onRest={this.props.HandleEndMoveAnim}
             >
                 { styles => (
                     <animated.div
