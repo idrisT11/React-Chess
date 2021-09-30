@@ -45,6 +45,9 @@
 #XbtnLogin{
     cursor: pointer;
 }
+#XbtnLogin:hover{
+    opacity: 0.8;
+}
 /*****************/
 
 .popupElements{
@@ -97,4 +100,8 @@
 
     min-width: 160px;
 
+}
+
+.LoginButton:hover{
+    opacity: 0.8;
 }

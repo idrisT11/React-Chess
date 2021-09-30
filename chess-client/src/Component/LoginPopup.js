@@ -210,11 +210,14 @@ export default class LoginPopup extends Component {
 
         <div id="LoginPopup-CTN">
 
-            <div>
+            <div id="loginHeaderCTN">
                 <img width="40px" height="40px" src="x.svg" id="XbtnLogin"
 
                     onClick={this.props.handleHideLogin}
                 />
+                <h1>
+                    الإتصال 
+                </h1>
             </div>
             <hr width="90%" style={{backgroundColor: 'black'}}/>
 
@@ -254,11 +257,14 @@ export default class LoginPopup extends Component {
 
             <div id="LoginPopup-CTN">
     
-                <div>
+                <div id="loginHeaderCTN">
                     <img width="40px" height="40px" src="x.svg" id="XbtnLogin"
     
                         onClick={this.props.handleHideLogin}
                     />
+                    <h1>
+                        ! مليح 
+                    </h1>
                 </div>
                 <hr width="90%" style={{backgroundColor: 'black'}}/>
     
