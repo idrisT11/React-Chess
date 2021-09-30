@@ -60,7 +60,7 @@ export default class Piece extends Component {
     render() {
         let position  = this.props.position,
             newPosition = this.props.newPosition;
-        console.log(position);
+
         let cursor = (this.props.color * this.props.pieceID > 0 ? 'pointer' : 'initial');
 
         return (

@@ -227,8 +227,8 @@ class Plateau extends React.Component{
         }
 
 
-        console.log({top: newMove.y +'', left: newMove.x+''}, renderingLastMove);
 
+        
         if( precPiece !== PIECE.NULL && renderingLastMove)
             grillePieceElements.push(
 
