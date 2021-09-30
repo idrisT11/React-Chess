@@ -16,6 +16,7 @@ export default class LoginPopup extends Component {
 
         this.state = {
             inscriptionMode: false,
+            inscriptionConfirmed: true,
 
             nameError: false,
             emailError: false,
@@ -89,7 +90,7 @@ export default class LoginPopup extends Component {
                 }
             }
 
-            xhttp.open("Post", "login", true);
+            xhttp.open("Post", "sign", true);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             let dataURL = new URLSearchParams(dataObject).toString();
             xhttp.send(dataURL);
@@ -137,11 +138,11 @@ export default class LoginPopup extends Component {
 
                     if(objRes.status)
 
-                        self.executeSignIn();
+                        self.executeLogin();
 
                     else 
 
-                        self.handleServerError(objRes.errorMessage, 'sign');
+                        self.handleServerError(objRes.errorMessage, 'login');
                 }
             }
 
@@ -248,14 +249,52 @@ export default class LoginPopup extends Component {
         );
     }
 
+    showInscriptionComfirmed(){
+        return(
+
+            <div id="LoginPopup-CTN">
+    
+                <div>
+                    <img width="40px" height="40px" src="x.svg" id="XbtnLogin"
+    
+                        onClick={this.props.handleHideLogin}
+                    />
+                </div>
+                <hr width="90%" style={{backgroundColor: 'black'}}/>
+    
+                <div className="popupElements" id="titlePopupLog">
+                    تحقق من بريدك  
+                </div> 
+                <div className="popupElements">
+                    لقد تم بعث بريدا إلكترونيا في صندوق البريد الإلكتروني الخاص بك، للتحقق من حسابك 
+                </div>
+
+                <div id="btnPopUp-CTN">
+                    <button className="LoginButton" 
+                    onClick={()=>this.setState({
+                        inscriptionMode: false,
+                        inscriptionConfirmed: false,
+                    })}>
+                        رجوع     
+                    </button>
+                </div>
+    
+            </div>
+    
+            );
+    }
+
     render() {
         return (
             <div id="LoginPopupOVERLAY-CTN">
-               {this.state.inscriptionMode &&
+               {this.state.inscriptionMode && !this.state.inscriptionConfirmed &&
                     this.showInscriptionScreen()
                }
-               {!this.state.inscriptionMode &&
+               {!this.state.inscriptionMode && !this.state.inscriptionConfirmed &&
                     this.showConnexionScreen()
+               }
+               { this.state.inscriptionConfirmed &&
+                    this.showInscriptionComfirmed()
                }
             </div>
         )

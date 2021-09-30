@@ -48,12 +48,19 @@
 /*****************/
 
 .popupElements{
-
+    width: 100%;
     text-align: right;
 
     display: flex;
     
     margin-top: 10px;
+}
+#titlePopupLog{
+    font-size: 2.2em;
+    font-weight: bold;
+    text-decoration: underline;
+
+    display: block;
 }
 .popupElements label{
 
@@ -86,6 +93,7 @@
     cursor: pointer;
 
     margin: auto;
+    padding-bottom: 10px;
 
     min-width: 160px;
 
