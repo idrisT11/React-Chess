@@ -66,6 +66,9 @@ export default class AppCTN extends Component {
                         status={plateauStatus}
                         move={move}
                     />
+
+                    <button>Create Room</button>
+                    <button>Join Room</button>
                     
                 </center>
 
