@@ -7,6 +7,11 @@ import Piece from './Piece';
 const PIECE = {
     NULL: 0,
     PION: 1,
+    CAVALIER: 2,
+    TOUR: 3,
+    FOU: 4,
+    ROI: 5,
+    REINE: 6
 }
 
 const COLOR = {
@@ -103,7 +108,7 @@ class Plateau extends React.Component{
     //Generate the bottom grid layer 
     generateGrille(selectedPiece, possibleMoves){
 
-        let grilleCaseElements = [];
+        let tableCaseElements = [];
         let black = true;
 
         for (let i = 0; i < 64 ; i++) 
@@ -122,7 +127,7 @@ class Plateau extends React.Component{
 
             let color = black ? '#769656' : '#eeeed2';
 
-            grilleCaseElements.push(
+            tableCaseElements.push(
                 //The first spring corresponds to the selected piece
                 <Spring
                     key={i+'caseGrille'}
@@ -157,12 +162,12 @@ class Plateau extends React.Component{
             
         }
 
-        return grilleCaseElements;
+        return tableCaseElements;
     }
 
     generatePieces(selectedPiece, moving, renderingLastMove){
 
-        let grillePieceElements = [];
+        let tablePieceElements = [];
 
         let precMove = this.props.move.previousPieceInfo,
             newMove = this.props.move.newPieceInfo,
@@ -205,7 +210,7 @@ class Plateau extends React.Component{
                 }
                 
 
-                grillePieceElements.push(
+                tablePieceElements.push(
 
                     <Piece 
                         pieceID={this.props.status[i][j]}
@@ -230,7 +235,7 @@ class Plateau extends React.Component{
 
         
         if( precPiece !== PIECE.NULL && renderingLastMove)
-            grillePieceElements.push(
+            tablePieceElements.push(
 
                 <Piece 
                     pieceID={precPiece}
@@ -248,13 +253,13 @@ class Plateau extends React.Component{
 
             );
 
-        return grillePieceElements;
+        return tablePieceElements;
 
     }
 
     generateClickLayer(){
 
-        let grilleClickElements = [];
+        let tableClickElements = [];
 
         for (let i = 0; i < 64 ; i++) 
         {
@@ -265,7 +270,7 @@ class Plateau extends React.Component{
             let isPlayersTile = this.props.status[y][x] * this.playerColor > 0,
                 isMovePossible =  this.state.possibleMoves !== null && this.state.possibleMoves[y][x];
 
-            grilleClickElements.push(
+            tableClickElements.push(
                 <div 
                     key={i+'clickGrille'}
                     className={
@@ -284,7 +289,7 @@ class Plateau extends React.Component{
             
         }
 
-        return grilleClickElements;
+        return tableClickElements;
     }
 
     findPossibleMoves(x, y, tour){
@@ -330,7 +335,145 @@ class Plateau extends React.Component{
                     possibleMoves[y+1][x-1] = 1;
             }
 
-            console.log(possibleMoves);
+        }
+          //ROOK OR QUEEN
+        //==============================================================
+        if ( table[y][x] === PIECE.TOUR || table[y][x] === PIECE.REINE) 
+        {
+            let i = 1;
+
+            while ( y+i < 8 && table[y+i][x] * tour <= 0) 
+            {
+                possibleMoves[y+i][x] = 1;
+
+                if (table[y+i][x] * tour < 0)
+
+                    break;
+
+                i++;
+            }
+
+            i = 1;
+            while (  y-i >= 0 && table[y-i][x] * tour <= 0) 
+            {
+                possibleMoves[y-i][x] = 1;
+
+                if (table[y-i][x] * tour < 0)
+
+                    break;
+                i++;
+            }
+
+            i = 1;
+            while ( x+i < 8 && table[y][x+i] * tour <= 0) 
+            {
+                possibleMoves[y][x+i] = 1;
+
+                if (table[y][x+i] * tour < 0)
+
+                    break;
+
+                i++;
+            }
+
+            i = 1;
+            while ( x-i >= 0 && table[y][x-i] * tour <= 0  ) 
+            {
+                possibleMoves[y][x-i] = 1;
+
+                if (table[y][x-i] * tour < 0)
+
+                    break;
+                i++;
+            }
+        }
+        //BISHOP OR QUEEN
+        //==============================================================
+        if ( table[y][x] == PIECE.FOU || table[y][x] == PIECE.REINE) 
+        {
+            let i = 1;
+
+            while ( y+i < 8  &&  x+i < 8 && table[y+i][x+i] * tour <= 0 ) 
+            {
+                possibleMoves[y+i][x+i] = 1;
+                
+                if (table[y+i][x+i] * tour < 0 )
+
+                    break;
+
+                i++;
+            }
+
+            i = 1;
+            while ( y-i >= 0  &&  x+i < 8 && table[y-i][x+i] * tour <= 0  ) 
+            {
+                possibleMoves[y-i][x+i] = 1;
+                
+                if (table[y-i][x+i] * tour < 0 )
+                
+                    break;
+                i++;
+            }
+
+            i = 1;
+            while ( y+i < 8  &&  x-i >= 0 && table[y+i][x-i] * tour <= 0) 
+            {
+                possibleMoves[y+i][x-i] = 1;
+
+                if (table[y+i][x-i] * tour < 0)
+
+                    break;
+                i++;
+            }
+
+            i = 1;
+            while ( y-i >= 0  &&  x-i >= 0 && table[y-i][x-i] * tour <= 0 ) 
+            {
+                possibleMoves[y-i][x-i] = 1;
+
+                if (table[y-i][x-i] * tour < 0)
+
+                    break;
+                i++;
+            }
+        }
+        //KNIGHT
+        //==============================================================
+        else if ( table[y][x] == PIECE.CAVALIER)
+        {
+
+                // ONE FORWARD LEFT DIAGONAL STEP AND ANOTHER STEP TO THE LEFT
+                if ((x > 0 && y > 1) && (table[y-2][x-1] * tour <= 0) )
+                    possibleMoves[y-2][x-1] = 1;
+
+                // ONE FORWARD RIGHT DIAGONAL STEP AND ANOTHER STEP TO THE RIGHT
+                if ((x > 0 && y < 6) && (table[y+2][x-1] * tour <= 0) )
+                    possibleMoves[y+2][x-1] = 1;
+
+                // ONE BACKWARD LEFT DIAGONAL STEP AND ANOTHER ONE TO THE LEFT
+                if ((x < 7 && y > 1) && (table[y-2][x+1] * tour <= 0) )
+                    possibleMoves[y-2][x+1] = 1;
+
+                // ONE BACKWARD RIGHT DIAGONAL STEP AND ANOTHER STEP TO THE RIGHT
+                if ((x < 7 && y < 6) && (table[y+2][x+1] * tour <= 0) )
+                    possibleMoves[y+2][x+1] = 1;
+
+                // ONE FORWARD LEFT DIAGONAL STEP AND ANOTHER FORWARD ONE
+                if ((x > 1 && y > 0) && (table[y-1][x-2] * tour <= 0) )
+                    possibleMoves[y-1][x-2] = 1;
+
+                // ONE FORWARD RIGHT DIAGONAL STEP AND ANOTHER FORWARD ONE
+                if ((x > 1 && y < 7) && (table[y+1][x-2] * tour <= 0) )
+                    possibleMoves[y+1][x-2] = 1;
+
+                // ONE BACKWARD DIAGONAL LEFT MOVE AND ANOTHER FORWARD MOVE
+                if ((x < 6 && y > 0  && (table[y-1][x+2] * tour <= 0) ))
+                    possibleMoves[y-1][x+2] = 1;
+
+                // ONE BACKWARD DIAGONAL RIGHT MOVE AND ANOTHER BACKWARD ONE
+                if ((x < 6 && y < 7) && (table[y+1][x+2] * tour <= 0) )
+                    possibleMoves[y+1][x+2] = 1;
+
         }
 
         return toggleDirection(possibleMoves, tour);

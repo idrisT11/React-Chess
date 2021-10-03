@@ -36,6 +36,27 @@ export default class GameParamSelec extends Component {
 
                 <div>
 
+                    <h2>اختر مدت اللعبة</h2>
+                    <div>
+                        <button>5</button>
+                        <button>10</button>
+                        <button>20</button>
+                    </div>
+                </div>
+
+                <div>
+
+                    <h2>اختر كلمة السرية للادخول</h2>
+                    <div>
+                        <div>
+                            <p></p>
+                            <input type="text" disabled="true"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+
                     <h2>اختر لون قطعك</h2>
                     <img src="Pieces/svgCommon/pionBLANC.svg" class="colorBTN"
 

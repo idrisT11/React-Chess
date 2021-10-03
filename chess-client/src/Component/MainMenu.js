@@ -16,12 +16,12 @@ const COLOR = {
 const plateauStatus = [
   [-3, -2, -4, -5, -6, -4, -2, -3],
   [-1, 0, -1, -1, -1, -1, -1, -1],
+  [0, 0, 2, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 4, 0],
+  [0, -1, 0, 0, 3, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, -1, 0, -1, 0, 0, 0, 0],
-  [0, 0, 1, 0, 0, 0, 0, 0],
   [1, 1, 0, 1, 1, 1, 1, 1],
-  [3, 2, 4, 6, 5, 4, 2, 3],
+  [0, 2, 4, 6, 5, 4, 2, 3],
 ];
 
 const move = {
@@ -43,7 +43,7 @@ export default class MainMenu extends Component {
         this.selectedGameMode = "";
 
         this.state = {
-            showParamSelec: false
+            showParamSelec: true
         }
     }
 
@@ -65,7 +65,7 @@ export default class MainMenu extends Component {
 
         }
     }
-    
+
     //=============================================
 
     initCreateRoom(){
