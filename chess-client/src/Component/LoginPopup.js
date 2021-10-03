@@ -16,7 +16,7 @@ export default class LoginPopup extends Component {
 
         this.state = {
             inscriptionMode: false,
-            inscriptionConfirmed: true,
+            inscriptionConfirmed: false,
 
             nameError: false,
             emailError: false,

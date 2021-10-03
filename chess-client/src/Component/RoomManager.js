@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 
-export default class GameManager extends Component {
+export default class RoomManager extends Component {
+
+    constructor(){
+        this.roomID = "";
+        this.players = "";
+    }
+
     render() {
         return (
             <div>

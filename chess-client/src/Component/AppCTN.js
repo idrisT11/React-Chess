@@ -1,39 +1,9 @@
 import React, { Component } from 'react'
 import Header from './Header';
 import LoginPopup from './LoginPopup';
+import MainMenu from './MainMenu';
 
-import Plateau from "./Plateau/Plateau";
 
-const PIECE = {
-  NULL: 0,
-  PION: 1,
-}
-const COLOR = {
-  BLANC: 1,
-  NOIR: -1
-}
-const plateauStatus = [
-  [-3, -2, -4, -5, -6, -4, -2, -3],
-  [-1, 0, -1, -1, -1, -1, -1, -1],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, -1, 0, -1, 0, 0, 0, 0],
-  [0, 0, 1, 0, 0, 0, 0, 0],
-  [1, 1, 0, 1, 1, 1, 1, 1],
-  [3, 2, 4, 6, 5, 4, 2, 3],
-];
-
-const move = {
-  previousPieceInfo:{
-    x: 1,
-    y: 1,
-  },
-  newPieceInfo:{
-    x: 1,
-    y: 4,
-  },
-  consumedPiece: PIECE.PION
-}
 
 export default class AppCTN extends Component {
 
@@ -62,14 +32,7 @@ export default class AppCTN extends Component {
                 />
                 
                 <center>
-                    <Plateau 
-                        status={plateauStatus}
-                        move={move}
-                    />
-
-                    <button>Create Room</button>
-                    <button>Join Room</button>
-                    
+                  <MainMenu />
                 </center>
 
                 {this.state.displayLoginPopUp && 
