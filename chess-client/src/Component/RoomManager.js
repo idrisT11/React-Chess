@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Plateau from './Plateau/Plateau'
 
 export default class RoomManager extends Component {
 
@@ -15,7 +16,23 @@ export default class RoomManager extends Component {
         return (
             <div>
                 <div>
-                    <span> </span>
+                    <span>دخل محمد في الغرفة لاعبًا</span>
+                    <span>دخل كمل في الغرفة لاعبًا</span>
+                    <span>دخل طاهر في الغرفة مشاهدًا</span>
+                    <span>خرج محمد من الغرفة</span>
+
+                    <button>مستعد ؟</button>
+                </div>
+                <div>
+
+                    <Plateau />
+                </div>
+
+                <div>
+                    <span>سلام<strong> :محمد </strong> </span>
+                    <span>كي راك دير خي<strong> :طاهر </strong> </span>>
+
+                    <button>برعث</button>     
                 </div>
             </div>
         )
