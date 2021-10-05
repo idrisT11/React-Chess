@@ -4,7 +4,11 @@ export default class RoomManager extends Component {
 
     constructor(){
         this.roomID = "";
-        this.players = "";
+        this.players = [];
+
+        this.state = {
+            status: 'waiting', //ingame
+        }
     }
 
     render() {

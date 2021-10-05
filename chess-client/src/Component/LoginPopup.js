@@ -29,12 +29,12 @@ export default class LoginPopup extends Component {
 
     }
 
-    executeSignIn(){
-
+    executeSignIn(obj){
+        console.log("signed", obj);
     }
 
-    executeLogin(){
-
+    executeLogin(obj){
+        console.log("logged", obj);
     }
 
     signAjax(){
@@ -82,7 +82,7 @@ export default class LoginPopup extends Component {
 
                     if(objRes.status)
 
-                        self.executeSignIn();
+                        self.executeSignIn(objRes);
 
                     else 
 
@@ -138,7 +138,7 @@ export default class LoginPopup extends Component {
 
                     if(objRes.status)
 
-                        self.executeLogin();
+                        self.executeLogin(objRes);
 
                     else 
 
