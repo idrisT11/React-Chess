@@ -36,17 +36,17 @@ export default class GameParamSelec extends Component {
 
                 <div>
 
-                    <h2>اختر مدت اللعبة</h2>
+                    <h2 class="popUpSetting">اختر مدت اللعبة</h2>
                     <div>
-                        <button>5</button>
-                        <button>10</button>
-                        <button>20</button>
+                        <button className="popupSelectionBTN">5</button>
+                        <button className="popupSelectionBTN">10</button>
+                        <button className="popupSelectionBTN">20</button>
                     </div>
                 </div>
 
                 <div>
 
-                    <h2>اختر كلمة السرية للادخول</h2>
+                    <h2 class="popUpSetting">اختر كلمة السرية للادخول</h2>
                     <div>
                         <div>
                             <p></p>
@@ -57,7 +57,7 @@ export default class GameParamSelec extends Component {
 
                 <div>
 
-                    <h2>اختر لون قطعك</h2>
+                    <h2 class="popUpSetting">اختر لون قطعك</h2>
                     <img src="Pieces/svgCommon/pionBLANC.svg" class="colorBTN"
 
                         id={this.state.color == 'BLANC' ? 'selectedColorBTN' : 'none'}
@@ -81,7 +81,7 @@ export default class GameParamSelec extends Component {
                 </div>
                 
                 <div>
-                    <button id="popupBTN" onClick={this.go.bind(this)}>إبدأ</button>
+                    <button  id="popupBTN" onClick={this.go.bind(this)}>إبدأ</button>
                 </div>
             </div>
             </div>

@@ -14,7 +14,9 @@ export default class RoomManager extends Component {
     render() {
         return (
             <div>
-                
+                <div>
+                    <span> </span>
+                </div>
             </div>
         )
     }
