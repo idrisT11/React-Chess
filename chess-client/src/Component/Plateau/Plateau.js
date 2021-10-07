@@ -24,7 +24,7 @@ class Plateau extends React.Component{
     constructor(props){
         super(props);
 
-        this.playerColor = 1;
+        this.playerColor = props.color;
         this.newMovePosition = null;
         this.newMovePositionStyle = null;
 
@@ -75,14 +75,19 @@ class Plateau extends React.Component{
             
             this.setState({
                 selectedPiece: {x , y},
-                possibleMoves: this.findPossibleMoves(x, y, this.playerColor),
+                possibleMoves: Plateau.findPossibleMoves(x, y, this.playerColor, this.props.status),
             });
 
         }
         
         //If we've selected a piece and clicked on a legit position to make a move
-        else if ( this.state.selectedPiece && this.state.possibleMoves[y][x] == 1 )
+        else if ( this.state.selectedPiece && this.state.possibleMoves[y][x] === 1 )
         {
+            let altMovePosition = {
+                y: this.state.selectedPiece.y,
+                x: this.state.selectedPiece.x
+            };
+
             this.newMovePosition = { x, y };
             this.newMovePositionStyle = {
                 top: (y * 75) + 'px',
@@ -91,7 +96,9 @@ class Plateau extends React.Component{
             this.setState({
                 moving: true,
                 possibleMoves: null
-            })
+            }, () =>
+                this.props.handleComfirmMove(altMovePosition, this.newMovePosition)
+            )
         }
         else
         {   
@@ -292,9 +299,10 @@ class Plateau extends React.Component{
         return tableClickElements;
     }
 
-    findPossibleMoves(x, y, tour){
+    static findPossibleMoves(x, y, tour, status){
         
-        let table = toggleDirection(this.props.status, tour),
+        let table = toggleDirection(status, tour),
+            possibleMovesList = [], // TODO ::
             possibleMoves = Array(8).fill(null).map(() => Array(8).fill(0));//Innit a 8x8 matrix (JS :/)
 
 
@@ -302,8 +310,9 @@ class Plateau extends React.Component{
 
         //PAWN
         //==============================================================
-        if ( table[y][x] === PIECE.PION) 
+        if ( Math.abs(table[y][x]) === PIECE.PION) 
         {
+
             let  pasclassique = false; // Si on peut fair un pas classique, on met cette variable a 1
 
             //CLASSICAL MOVE
@@ -338,7 +347,7 @@ class Plateau extends React.Component{
         }
           //ROOK OR QUEEN
         //==============================================================
-        if ( table[y][x] === PIECE.TOUR || table[y][x] === PIECE.REINE) 
+        if ( Math.abs(table[y][x]) === PIECE.TOUR || Math.abs(table[y][x]) === PIECE.REINE) 
         {
             let i = 1;
 
@@ -389,7 +398,7 @@ class Plateau extends React.Component{
         }
         //BISHOP OR QUEEN
         //==============================================================
-        if ( table[y][x] == PIECE.FOU || table[y][x] == PIECE.REINE) 
+        if ( Math.abs(table[y][x]) === PIECE.FOU || Math.abs(table[y][x]) === PIECE.REINE) 
         {
             let i = 1;
 
@@ -439,7 +448,7 @@ class Plateau extends React.Component{
         }
         //KNIGHT
         //==============================================================
-        else if ( table[y][x] == PIECE.CAVALIER)
+        else if ( Math.abs(table[y][x]) === PIECE.CAVALIER)
         {
 
                 // ONE FORWARD LEFT DIAGONAL STEP AND ANOTHER STEP TO THE LEFT

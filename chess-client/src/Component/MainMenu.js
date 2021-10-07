@@ -54,14 +54,20 @@ export default class MainMenu extends Component {
             case "CREATE":
                 
                 this.launchCreateRoom(gameParam);
+                break;
 
             case "JOIN":
             
                 this.launchJoinRoom(gameParam);
+                break;
 
             case "IA":
         
                 this.launchIA(gameParam);
+                break;
+
+            default:
+                break;
 
         }
     }
@@ -146,3 +152,5 @@ export default class MainMenu extends Component {
         )
     }
 }
+
+

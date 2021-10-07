@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Header from './Header';
 import LoginPopup from './LoginPopup';
 import MainMenu from './MainMenu';
+import GameInterface from './GameInterface';
 
 
 
@@ -32,7 +33,7 @@ export default class AppCTN extends Component {
                 />
                 
                 <center>
-                  <MainMenu />
+                    <GameInterface color={1}/>
                 </center>
 
                 {this.state.displayLoginPopUp && 

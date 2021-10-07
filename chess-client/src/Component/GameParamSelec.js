@@ -26,6 +26,7 @@ export default class GameParamSelec extends Component {
                 <div id="popupHeaderCTN">
                     <img width="40px" height="40px" src="x.svg" id="Xbtn"
                         onClick={this.props.handleHideParam}
+                        alt="غلق"
                     />
                     <h1>
                         مميزات اللعبة
@@ -60,22 +61,23 @@ export default class GameParamSelec extends Component {
                     <h2 class="popUpSetting">اختر لون قطعك</h2>
                     <img src="Pieces/svgCommon/pionBLANC.svg" class="colorBTN"
 
-                        id={this.state.color == 'BLANC' ? 'selectedColorBTN' : 'none'}
+                        id={this.state.color === 'BLANC' ? 'selectedColorBTN' : 'none'}
+                        alt="أبيض"
 
                         onClick={()=>this.setState({color: 'BLANC'})}
                     />
 
                     <img src="Pieces/svgCommon/pionNOIRBLANC.svg" class="colorBTN"
 
-                        id={this.state.color == 'ALEA' ? 'selectedColorBTN' : 'none'}
-
+                        id={this.state.color === 'ALEA' ? 'selectedColorBTN' : 'none'}
+                        alt="عشوائي"
                         onClick={()=>this.setState({color: 'ALEA'})}
                     />
 
                     <img src="Pieces/svgCommon/pionNOIR.svg" class="colorBTN"
 
-                        id={this.state.color == 'NOIR' ? 'selectedColorBTN' : 'none'}
-                        
+                        id={this.state.color === 'NOIR' ? 'selectedColorBTN' : 'none'}
+                        alt="أسود"
                         onClick={()=>this.setState({color: 'NOIR'})}
                     />
                 </div>

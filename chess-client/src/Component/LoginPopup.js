@@ -47,10 +47,10 @@ export default class LoginPopup extends Component {
             reMdpError: false,   
         }
 
-        errors.emailError = ( this.email.length == 0 || false);
+        errors.emailError = ( this.email.length === 0 || false);
         errors.mdpError = ( this.mdp.length < 8 );
-        errors.reMdpError = ( this.reMdpError != this.mdp );
-        errors.nameError = ( this.name.length == 0 );
+        errors.reMdpError = ( this.reMdpError !== this.mdp );
+        errors.nameError = ( this.name.length === 0 );
 
         
 
@@ -75,7 +75,7 @@ export default class LoginPopup extends Component {
 
             xhttp.onreadystatechange = ()=>{
 
-                if (this.readyState == 4 && this.status == 200) 
+                if (this.readyState === 4 && this.status === 200) 
                 {
                     let rawJSON = xhttp.responseText;
                     let objRes = JSON.parse(rawJSON);
@@ -106,7 +106,7 @@ export default class LoginPopup extends Component {
             mdpError: false,
         }
 
-        errors.nameError = ( this.name.length == 0 );
+        errors.nameError = ( this.name.length === 0 );
         errors.mdpError = ( this.mdp.length === 0 );
         
 
@@ -131,7 +131,7 @@ export default class LoginPopup extends Component {
 
             xhttp.onreadystatechange = ()=>{
 
-                if (this.readyState == 4 && this.status == 200) 
+                if (this.readyState === 4 && this.status === 200) 
                 {
                     let rawJSON = xhttp.responseText;
                     let objRes = JSON.parse(rawJSON);

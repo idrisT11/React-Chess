@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Plateau from './Plateau/Plateau'
+import GameInterface from './GameInterface'
 
 export default class RoomManager extends Component {
 
@@ -10,6 +10,7 @@ export default class RoomManager extends Component {
         this.state = {
             status: 'waiting', //ingame
         }
+
     }
 
     render() {
@@ -23,9 +24,11 @@ export default class RoomManager extends Component {
 
                     <button>مستعد ؟</button>
                 </div>
+
                 <div>
 
-                    <Plateau />
+                    <GameInterface />
+
                 </div>
 
                 <div>
