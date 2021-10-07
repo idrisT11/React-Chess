@@ -28,19 +28,28 @@ class Plateau extends React.Component{
         this.newMovePosition = null;
         this.newMovePositionStyle = null;
 
+
         this.state = {
             selectedPiece: null,
             possibleMoves: null,
             moving: false,
             renderingLastMove: false,
+
+            turn: -1,
+            clickable: props.clickable,
         }
 
         
     }
 
+    componentDidUpdate(){
+
+    }
+
     static getDerivedStateFromProps(props, state){
         return {
-            renderingLastMove: true,
+            renderingLastMove: state.turn !== props.turn,
+            turn: props.turn,
         }
     }
 
@@ -50,13 +59,27 @@ class Plateau extends React.Component{
 
             this.setState({renderingLastMove : false});
 
-        else if ( this.state.moving ) {
-            
+        else if ( this.state.moving ) 
+        {
+            let altMovePosition = {
+                y: this.state.selectedPiece.y,
+                x: this.state.selectedPiece.x
+            };
+
+            /*this.setState({
+                moving: false,
+            })*/
+
+            this.props.handleComfirmMove(altMovePosition, this.newMovePosition)
         }
 
     }
 
-    handleClick(x, y){
+    handleClick(x, y, clickable){
+
+        if(!clickable)
+            return;
+
         let table = this.props.status;
 
 
@@ -95,10 +118,9 @@ class Plateau extends React.Component{
             }
             this.setState({
                 moving: true,
-                possibleMoves: null
-            }, () =>
-                this.props.handleComfirmMove(altMovePosition, this.newMovePosition)
-            )
+                possibleMoves: null,
+                clickable: false,
+            })
         }
         else
         {   
@@ -264,7 +286,7 @@ class Plateau extends React.Component{
 
     }
 
-    generateClickLayer(){
+    generateClickLayer(clickable){
 
         let tableClickElements = [];
 
@@ -287,7 +309,7 @@ class Plateau extends React.Component{
                     }
 
 
-                    onClick={()=>this.handleClick(x, y)}
+                    onClick={()=>this.handleClick(x, y, clickable)}
                 >
                     
                 </div>
@@ -504,18 +526,21 @@ class Plateau extends React.Component{
     }
 
     render(){
-        console.log(this.state.renderingLastMove);
+        console.log('updage', this.state.renderingLastMove);
         return(
+
             <div id='plateauCTN'>
+
                 {this.generateGrille(this.state.selectedPiece, this.state.possibleMoves)}
 
-                <div id='piecesCTN' onClick={(e)=>this.handleClick(e)}>
+                <div id='piecesCTN'>
                     {this.generatePieces(this.state.selectedPiece, this.state.moving, this.state.renderingLastMove)}
                 </div>
 
                 <div id='clickLayer'>
-                    {this.generateClickLayer()}
+                    {this.generateClickLayer(this.state.clickable)}
                 </div>
+
             </div>
         );
     }
