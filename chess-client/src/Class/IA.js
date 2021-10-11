@@ -15,7 +15,7 @@ export default class PlayerIA{
     }
 
     getIAMove(){
-
+        
         let pieceSelected = false,
             pickedMove,
             coord;

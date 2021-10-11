@@ -22,6 +22,8 @@ const COLOR = {
 class Plateau extends React.Component{
 
     constructor(props){
+
+        console.log('neu');
         super(props);
 
         this.playerColor = props.color;
@@ -33,7 +35,7 @@ class Plateau extends React.Component{
             selectedPiece: null,
             possibleMoves: null,
             moving: false,
-            renderingLastMove: false,
+            renderingLastMove: true,
 
             turn: -1,
             clickable: props.clickable,
@@ -47,17 +49,38 @@ class Plateau extends React.Component{
     }
 
     static getDerivedStateFromProps(props, state){
-        return {
-            renderingLastMove: state.turn !== props.turn,
-            turn: props.turn,
-        }
+        if (state.turn !== props.turn)
+
+        console.log("new Turn");
+        if (state.turn !== props.turn)
+        
+            return {
+                renderingLastMove: true,
+                selectedPiece: null,
+                possibleMoves: null,
+                moving: false,
+                renderingLastMove: true,
+
+                clickable: props.clickable,
+
+                turn: props.turn,
+            }
+        else 
+            return {};
     }
 
-    HandleEndMoveAnim(){
+    HandleEndMoveAnim(moveType){
+        //moveType(boolean): either the end of the fadeIn or translation animation
 
-        if( this.state.renderingLastMove )
+        if(!moveType)
+            return;
+
+        
+        if( this.state.renderingLastMove ){
 
             this.setState({renderingLastMove : false});
+
+        }
 
         else if ( this.state.moving ) 
         {
@@ -65,11 +88,7 @@ class Plateau extends React.Component{
                 y: this.state.selectedPiece.y,
                 x: this.state.selectedPiece.x
             };
-
-            /*this.setState({
-                moving: false,
-            })*/
-
+            
             this.props.handleComfirmMove(altMovePosition, this.newMovePosition)
         }
 
@@ -79,6 +98,10 @@ class Plateau extends React.Component{
 
         if(!clickable)
             return;
+
+        if(this.state.moving)
+            return;
+
 
         let table = this.props.status;
 
@@ -218,7 +241,7 @@ class Plateau extends React.Component{
 
 
                 let positionStyle, newPositionStyle;
-                if (beenMovedLastTurn)
+                if (beenMovedLastTurn && renderingLastMove)
                 {
                     positionStyle = {
                         top: ( precMove.y * 75 ) + 'px',
@@ -250,9 +273,9 @@ class Plateau extends React.Component{
                         position={positionStyle}
                         newPosition={newPositionStyle}
 
-                        HandleEndMoveAnim={()=>this.HandleEndMoveAnim()}
+                        HandleEndMoveAnim={(moveType)=>this.HandleEndMoveAnim(moveType)}
 
-                        key={k+'pieceGrille'}
+                        key={k+'pieceGrille' + renderingLastMove}
                     />
 
                 );
@@ -275,7 +298,7 @@ class Plateau extends React.Component{
                     position={{top: (newMove.y*75)+'px' , left: (newMove.x*75)+'px'}}
                     newPosition={{top: (newMove.y*75)+'px' +'', left: (newMove.x*75)+'px'+''}}
 
-                    HandleEndMoveAnim={()=>this.HandleEndMoveAnim()}
+                    HandleEndMoveAnim={(moveType)=>this.HandleEndMoveAnim(moveType)}
 
                     key={99530+'pieceGrille'}
                 />
@@ -526,7 +549,7 @@ class Plateau extends React.Component{
     }
 
     render(){
-        console.log('updage', this.state.renderingLastMove);
+        console.log('updage', this.state);
         return(
 
             <div id='plateauCTN'>

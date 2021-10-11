@@ -16,7 +16,14 @@ const COLOR = {
   BLANC: 1,
   NOIR: -1
 }
-
+/*            [-0, -2, -4, -5, -6, -0, -0, -3],
+            [0, 0, -0, -0, -0, -1, -1, -1],
+            [0, -1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, -1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [3, 2, 4, 6, 5, 4, 2, 3],*/
 export default class RoomManager extends Component {
 
     constructor(props){
@@ -26,11 +33,11 @@ export default class RoomManager extends Component {
 
         this.color = props.color;
         this.status = [
-            [-3, -2, -4, -5, -6, -4, -2, -3],
-            [-1, 0, -1, -1, -1, -1, -1, -1],
+            [-0, -0, -0, -5, -6, -0, -0, -0],
+            [0, 0, -0, -0, -0, -0, -0, -0],
             [0, -1, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, -0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [1, 1, 1, 1, 1, 1, 1, 1],
             [3, 2, 4, 6, 5, 4, 2, 3],
@@ -63,16 +70,22 @@ export default class RoomManager extends Component {
     letIAChoose(){
 
         let iaMove = this.ia.getIAMove();
+        console.log(this.copyTable(this.status));
 
         this.status[iaMove.newPieceInfo.y][iaMove.newPieceInfo.x] = 
                     this.status[iaMove.previousPieceInfo.y][iaMove.previousPieceInfo.x];
+        this.status[iaMove.previousPieceInfo.y][iaMove.previousPieceInfo.x] = PIECE.NULL;
+
+
 
         this.setState({
             turn: this.state.turn + 1,
             move: {...iaMove},
             status: this.copyTable(this.status),
         });
-        console.log(iaMove);
+
+        console.log(iaMove, this.status);
+
         this.ia.setIAStatus( this.copyTable(this.status) );
 
 
@@ -80,9 +93,6 @@ export default class RoomManager extends Component {
 
     comfirmMove(altCoord, newCoord){
 
-        let consumedPiece = this.status[newCoord.y][newCoord.x],
-            previousPieceInfo = altCoord,
-            newPieceInfo = newCoord;
 
         this.status[newCoord.y][newCoord.x] = this.status[altCoord.y][altCoord.x];
         this.status[altCoord.y][altCoord.x] = PIECE.NULL;
@@ -109,25 +119,13 @@ export default class RoomManager extends Component {
         return newTable;
     }
 
-    getNewStatus(altStatus, altCoord, newCoord ){
-
-        let newStatus = new Array(8);
-
-        for (let i = 0; i < 8; i++) 
-
-            newStatus[i] = [...altStatus[i]]
-        
-        newStatus[newCoord.y][newCoord.x] = altStatus[altCoord.y][altCoord.x];
-        newStatus[altCoord.y][altCoord.x] = PIECE.NULL;
-
-        return newStatus;
-        
-    }
 
     render() {
         return (
             <div>
                     <Plateau 
+                        key={this.state.turn+'turn'}
+
                         clickable={true}
                         turn={this.state.turn}
                         color={this.props.color}

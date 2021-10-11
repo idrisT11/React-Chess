@@ -154,6 +154,9 @@ export default class LoginPopup extends Component {
         
     }
 
+
+    
+
     showInscriptionScreen(){
 
         return (

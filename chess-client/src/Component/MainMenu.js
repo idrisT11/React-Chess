@@ -43,7 +43,7 @@ export default class MainMenu extends Component {
         this.selectedGameMode = "";
 
         this.state = {
-            showParamSelec: true
+            showParamSelec: false
         }
     }
 
@@ -112,6 +112,8 @@ export default class MainMenu extends Component {
                         <Plateau 
                             status={plateauStatus}
                             move={move}
+
+                            clickable={false}
                         />
                     </div>
 

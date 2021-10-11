@@ -33,7 +33,8 @@ export default class AppCTN extends Component {
                 />
                 
                 <center>
-                    <GameInterface color={1}/>
+                    <MainMenu />
+                    {/*<GameInterface color={1}/>*/}
                 </center>
 
                 {this.state.displayLoginPopUp && 
